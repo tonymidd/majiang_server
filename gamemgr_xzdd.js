@@ -396,13 +396,10 @@ function checkCanTingPai(game,seatData){
         }
     }
 
-    //手牌数量有可能为13、10、7、4、1
-    if( haveCount==1 || haveCount == 2 ){
-        seatData.canTing = true;
-        console.log(' --- 检查可以听牌 ');
-    }
-
-
+    var isCanTing = mjutils.checkTingPai(seatData,0,26); 
+    seatData.canTing = isCanTing;
+    console.log(' -------- 是否可以听牌 ---------------');
+    console.log(isCanTing);
 
 }
 
@@ -514,8 +511,7 @@ function doUserMoPai(game){
     //检查是否可以暗杠或者胡
     //检查胡，直杠，弯杠
     checkCanAnGang(game,turnSeat);
-    checkCanWanGang(game,turnSeat,pai);
-    checkCanTingPai(game,turnSeat);
+    checkCanWanGang(game,turnSeat,pai); 
     //检查看是否可以和
     checkCanHu(game,turnSeat,pai);
 
@@ -1418,8 +1414,7 @@ exports.bankerChuPai = function (game) {
             gs.countMap[duoyu] -= 1;
         }
 
-        // 检查是否可以听胡
-        checkCanTingPai(game,gs);
+        
 
         // 再把第14张牌给回来
         if(duoyu >= 0){
@@ -1601,7 +1596,7 @@ exports.chuPai = function(userId,pai){
     //记录座位号的玩家动作
     recordGameAction(game,seatData.seatIndex,consts.ACTION.CHUPAI,pai);
 
-    checkCanTingPai(game,seatData);
+
 
     //将出的牌推送给桌子上的四个玩家
     console.log('将出的牌推送给桌子上的四个玩家  pai:%s ',pai);
@@ -1843,7 +1838,7 @@ function doGang(game,turnSeat,seatData,gangtype,numOfCnt,pai){
         }
     }
 
-    checkCanTingPai(game,seatData);
+
     //通知其他玩家，有人杠了牌
     userMgr.broacastInRoom('gang_notify_push',{userid:seatData.userId,pai:pai,gangtype:gangtype},seatData.userId,true);
 
